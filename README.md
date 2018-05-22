@@ -75,3 +75,13 @@ need to set the classpath to `hamcrest-core`. Then lastly we need to tell java t
 ```zsh
 java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore FizzbuzzTest
 ```
+
+JUnit should then output if the tests where `OK` or `FAILURE`. Each `period( . )` represnent one
+test.
+```zsh
+JUnit version 4.12
+.....
+Time: 0.003
+
+OK (5 tests)
+```
