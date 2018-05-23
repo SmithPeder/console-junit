@@ -2,7 +2,7 @@
 
 After removing Eclipse from my system, then realizing that writing `JUnit` tests will be on the exam
 this year I figured that it would be faster just running the tests like i run normal `.java` files.
-After counsel from the elders telling me that running `JUnit` tests without and IDE was stupid, I
+After counsel from the elders telling me that running `JUnit` tests without an IDE was stupid, I
 figured that I had to run the tests without an IDE. After dealing with some `export PATH` problems I
 finally got it working fine.
 
