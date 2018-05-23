@@ -46,13 +46,13 @@ public class FizzBuzzTest {
   @Test
   public void test_getResult_returnOne() {
     String result = new FizzBuzz().getResult(1);
-    assertEquals("Error", result):
+    assertEquals("1", result):
   }
 
   @Test
   public void test_getResult_returnBuzz() {
     String result = new FizzBuzz().getResult(15);
-    assertEquals("Error", result):
+    assertEquals("FizzBuzz", result):
   }
 
   // ...
