@@ -1,21 +1,10 @@
 public class FizzBuzz {
   public String getResult(int i) {
-    String result;
-      if ( i < 1) {
-        result = "Error";
-      } 
-      else if (i % 15 == 0) {
-        result = "FizzBuzz";
-      } 
-      else if (i % 3 == 0) {
-        result = "Fizz";
-      } 
-      else if (i % 5 == 0) {
-        result = "Buzz";
-      } 
-      else {
-        result = String.valueOf(i);
-      }
-    return result;
+    switch(i % 15) {
+      case 0:                           return "FizzBuzz";
+      case 3: case 6: case 9: case 12:  return "Fizz";
+      case 5: case 10:                  return "Buzz"; 
+      default:                          return String.valueOf(i);
+    }
   }
 }

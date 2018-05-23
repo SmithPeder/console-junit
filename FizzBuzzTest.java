@@ -6,7 +6,7 @@ public class FizzBuzzTest {
   @Test
   public void test_getResult_returnWrongOnZero() {
     String result = new FizzBuzz().getResult(0);
-    assertEquals("Error", result);
+    assertEquals("FizzBuzz", result);
   }
 
   @Test
