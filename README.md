@@ -9,8 +9,10 @@ finally got it working fine.
 ## Setup
 
 The first step is heading over to the [junit](https://github.com/junit-team/junit4/wiki/Download-and-Install)
-git repository, and downloading `junit.jar` and `hamcrest-core.jar`. For this example both these
-`.jar` files are positioned in the root directory of the project. That is it, the setup is complete.
+git repository, and downloading `junit.jar` and `hamcrest-core.jar`.
+There are two ways of using these `.jar` files. 
+- The `quick setup-slow run` way. This way use the `no-global-path` folder as root.
+- The `slow setup-fast run` way. This way use the `global-path` folder as root.
 
 ## Writing tests
 
@@ -27,10 +29,7 @@ FizzBuzz program with a few tests.
 public class FizzBuzz {
   public String getResult(int i) {
     switch(i % 15) {
-      case 0:                           return "FizzBuzz";
-      case 3: case 6: case 9: case 12:  return "Fizz";
-      case 5: case 10:                  return "Buzz"; 
-      default:                          return String.valueOf(i);
+      // logic ...
     }
   }
 }
@@ -45,25 +44,25 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquls;
 
 public class FizzBuzzTest {
-
-  @Test
-  public void test_getResult_returnOne() {
-    String result = new FizzBuzz().getResult(1);
-    assertEquals("1", result):
-  }
-
+  
   @Test
   public void test_getResult_returnBuzz() {
     String result = new FizzBuzz().getResult(15);
     assertEquals("FizzBuzz", result):
   }
 
-  // ...
   // more tests
 }
 ```
 
-## Running tests
+
+## Easy Setup
+
+When choosing the easy path all you need to do is adding the two `.jar` files to the root of your
+project, like done in `no-global-path`. Then you can write your test, and head down to the "Running
+easy tests" section.
+
+## Running easy tests
 
 After writing all the test cases, we want to check we are ready to compile. We cant compile like
 normal using `javac FizzBuzzTest.java`. We need to compile while referencing the `.jar` files. So to
@@ -91,3 +90,63 @@ Time: 0.003
 
 OK (5 tests)
 ```
+
+## Advanced Setup
+
+When choosing the advanced you need to do some stuff before you are ready to go, to the end result
+is a lot better, and tests can be run with ease. Here the setup may change due to differences in
+operation system/shell/setup and so forth. The gist of it is that two things must be done.
+- A global path needs to point to a location where the `.jar` files are located.
+- A shell script needs to be written to make life easy.
+
+So in your stock shell config file you need to export the path of `junit`
+```zsh
+export CLASSPATH=.:$CLASSPATH:~/JUnit/junit-4.12.jar:~/JUnit/hamcrest-core-1.3.jar
+```
+Then as seen in the path files, the `CLASSPATH` point to a folder in the root directory of the 
+system called JUnit where both of the `.jar` files are located. 
+
+## Running tests using script
+
+Now you should be able to
+compile and run your tests with.
+```shell
+javac FizzBuzz.java FizzBuzzTest.java
+java org.junit.runner.JUnitCore FizzBuzzTest
+```
+But this only runs one file and you will go mad if you have a big project with lots of tests. So a 
+script is due. Currently I have this script as a shortcut in my `zshrc.sh` config file.
+```bash
+javat() {
+  echo Remove old files...
+  rm *.class || echo No class files to remove in root
+  rm tests/*.class || echo No class files to remove in tests
+  printf "\n"
+  echo Compiling source code...
+  f=$(javac $(find . -name '*.java') -d $PWD)
+  if [ $? != 0 ]]; then
+    echo "Compiling of code failed..."
+  else
+    echo Compiling of code success...
+    printf "\n"
+    for f in *Test*.class
+    do
+    printf "\n-------------------"
+    echo Test: ${f%.*}
+    java org.junit.runner.JUnitCore ${f%.*}
+    done
+    echo Cleaning up...
+    rm *.class
+  fi
+}
+```
+To make it short, the script removes all old `.class` files, then tries to compile everything in the
+project. If the compile is a success it runs each test file and outputs the result. Then it cleans
+up by removing all the `.class` files.
+
+All you need to do then is run `javat` in the root of your project. 
+<p align="center">
+<img src = "https://i.imgur.com/4SaPpNv.png">
+</p>
+
+
