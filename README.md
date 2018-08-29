@@ -117,28 +117,25 @@ java org.junit.runner.JUnitCore FizzBuzzTest
 But this only runs one file and you will go mad if you have a big project with lots of tests. So a 
 script is due. Currently I have this script as a shortcut in my `zshrc.sh` config file.
 ```bash
-javat() {
-  echo Remove old files...
-  rm *.class || echo No class files to remove in root
-  rm tests/*.class || echo No class files to remove in tests
-  printf "\n"
-  echo Compiling source code...
-  f=$(javac $(find . -name '*.java') -d $PWD)
-  if [ $? != 0 ]]; then
-    echo "Compiling of code failed..."
-  else
-    echo Compiling of code success...
+  javat() {
     printf "\n"
-    for f in *Test*.class
-    do
-    printf "\n-------------------"
-    echo Test: ${f%.*}
-    java org.junit.runner.JUnitCore ${f%.*}
-    done
-    echo Cleaning up...
-    rm *.class
-  fi
-}
+    echo Compiling source/test code...
+    f=$(javac $(find . -name '*.java') -d $PWD)
+    if [[ $? != 0 ]]; then
+      echo "Compiling of code failed..."
+    else
+      echo Compiling of code success...
+      for f in *Test*.class
+      do
+      printf "\n------------------\n"
+      echo ${f%.*}
+      printf "------------------\n"
+      java org.junit.runner.JUnitCore ${f%.*}
+      done
+      echo Cleaning up...
+      rm *.class
+    fi
+  }
 ```
 To make it short, the script removes all old `.class` files, then tries to compile everything in the
 project. If the compile is a success it runs each test file and outputs the result. Then it cleans
